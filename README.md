@@ -1,9 +1,12 @@
 # Custom Adapter RecyclerView
 
+simple use android recyclerView adapter and endlessScrolled in android support library recyclerView 
+
  ###### via gradle:   
   
 ```Gradle  
- implementation 'ir.farshid_roohi:customAdapterRecycleView:0.1'
+  implementation 'com.android.support:recyclerview-v7:28.0.0'
+  implementation 'ir.farshid_roohi:customAdapterRecycleView:0.1'
  
  allprojects {
      repositories {
@@ -12,7 +15,6 @@
          maven { url "https://dl.bintray.com/farshidroohi/CustomAdapterRecyclerview" }
      }
  }
- 
  
  ```  
  <hr>
