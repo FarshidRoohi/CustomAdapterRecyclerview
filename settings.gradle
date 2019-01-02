@@ -1,1 +1,1 @@
-include ':app', ':customAdapterRecycleView'
+include ':sample', ':customAdapterRecycleView'
