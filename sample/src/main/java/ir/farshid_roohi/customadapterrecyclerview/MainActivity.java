@@ -18,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView    recyclerView = findViewById(R.id.recycler_view);
 
-        final MyAdapter adapter = new MyAdapter();
+        final MyAdapter adapter      = new MyAdapter();
         adapter.endLessScrolled(recyclerView);
         adapter.addItems(getTempItems());
         recyclerView.setAdapter(adapter);
