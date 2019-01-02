@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -23,13 +24,12 @@ import ir.farshid_roohi.customadapterrecycleview.viewHolder.ViewHolderProgress;
  */
 public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static int                ITEM_VIEW     = 0;
-    private static int                ITEM_PROGRESS = 0;
+    private static int ITEM_VIEW     = 0;
+    private static int ITEM_PROGRESS = 0;
 
-    private        List<T>            list;
-    private        RecyclerView       recyclerView;
-    private        Context            context;
-    private        OnLoadMoreListener onLoadMoreListener;
+    private List<T>            list;
+    private Context            context;
+    private OnLoadMoreListener onLoadMoreListener;
 
     private boolean isLoading;
     private int     totalItemCount, visibleTotalCount, lastVisibleItem;
@@ -44,7 +44,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     }
 
     public AdapterRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
+        this.initRecyclerViewListener(recyclerView);
     }
 
     public AdapterRecyclerView(List<T> items) {
@@ -60,6 +60,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         if (viewType == ITEM_PROGRESS) {
             ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),
                     getItemLayout(viewType), viewGroup, false);
+
             return new ViewHolder(binding);
         }
 
@@ -112,15 +113,17 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     }
 
     public void addItem(T... item) {
+        this.hiddenLoading();
         if (this.list == null) {
             this.list = new ArrayList<>();
         }
         List<T> items = new ArrayList<>(Arrays.asList(item));
         this.list.addAll(items);
-        notifyItemRangeChanged(this.list.size() - items.size(), this.list.size());
+        notifyItemRangeChanged(getItemCount() - items.size(), getItemCount());
     }
 
     public void addItems(List<T> items) {
+        this.hiddenLoading();
         this.list = items;
         this.notifyDataSetChanged();
     }
@@ -129,7 +132,66 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
+    public void endLessScrolled(RecyclerView recyclerView) {
+        initRecyclerViewListener(recyclerView);
+    }
+
     public Context getContext() {
         return context;
     }
+
+    public List<T> getItems() {
+        return this.list;
+    }
+
+
+    private void initRecyclerViewListener(RecyclerView recyclerView) {
+
+        if (this.onLoadMoreListener == null) return;
+
+        if (recyclerView == null) return;
+
+        if (!(recyclerView.getLayoutManager() instanceof LinearLayoutManager)) return;
+
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                totalItemCount = linearLayoutManager.getItemCount();
+                visibleTotalCount = linearLayoutManager.getChildCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+
+                if (totalItemCount <= visibleTotalCount) {
+                    return;
+                }
+
+                if (!isLoading && (lastVisibleItem + visibleTotalCount) >= totalItemCount) {
+                    onLoadMoreListener.onLoadMore();
+                    isLoading = true;
+                }
+            }
+        });
+    }
+
+    public void showLoading() {
+        if (this.list == null) {
+            return;
+        }
+        this.list.add(null);
+        this.notifyItemInserted(getItemCount() - 1);
+        isLoading = true;
+
+    }
+
+    public void hiddenLoading() {
+        if (this.list != null && getItemCount() != 0 && isLoading) {
+            this.list.remove(getItemCount() - 1);
+            this.notifyItemRemoved(getItemCount());
+        }
+        isLoading = false;
+    }
+
 }
