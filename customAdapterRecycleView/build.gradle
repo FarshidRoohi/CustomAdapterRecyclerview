@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 28
@@ -6,9 +8,6 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -20,10 +19,59 @@ android {
         }
     }
 
-    dataBinding{
+    dataBinding {
         enabled = true
     }
 
+}
+group = 'ir.farshid_roohi'
+version = '0.1'
+
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+task generateJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath()
+            .join(File.pathSeparator))
+}
+
+task generateJavadocsJar(type: Jar) {
+    from generateJavadocs.destinationDir
+    classifier 'javadoc'
+}
+
+generateJavadocsJar.dependsOn generateJavadocs
+
+artifacts {
+    archives generateJavadocsJar
+    archives generateSourcesJar
+}
+
+bintray {
+    user = 'xxxx'
+    key = 'xxxx'
+    pkg {
+
+        repo = 'CustomAdapterRecyclerview'
+        name = 'CustomAdapterRecyclerview'
+        userOrg = ''
+
+        version {
+            name = '0.1'
+            desc = 'Custom Adapter RecyclerView'
+            released = new Date()
+            vcsTag = '0.1'
+        }
+
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/FarshidRoohi/CustomAdapterRecyclerview'
+        websiteUrl = 'http://farshid-roohi.ir'
+    }
+    configurations = ['archives']
 }
 
 dependencies {
