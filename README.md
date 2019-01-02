@@ -2,6 +2,9 @@
 
 simple use android recyclerView adapter and endlessScrolled in android support library recyclerView 
 
+- clean uses
+- ability add custom layout in progress pagination and default layout
+
  ###### via gradle:   
   
 ```Gradle  
@@ -101,3 +104,6 @@ public List<String> getTempItems() {
   return items;  
 }
 ```
+ ##### screenShot: 
+ 
+ <img src="https://raw.githubusercontent.com/FarshidRoohi/CustomAdapterRecyclerview/master/art/img.png" alt="screen show" width="270px" height="500px">
