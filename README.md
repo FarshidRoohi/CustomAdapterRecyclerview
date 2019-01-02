@@ -4,6 +4,16 @@
   
 ```Gradle  
  implementation 'ir.farshid_roohi:customAdapterRecycleView:0.1'
+ 
+ allprojects {
+     repositories {
+         google()
+         jcenter()
+         maven { url "https://dl.bintray.com/farshidroohi/CustomAdapterRecyclerview" }
+     }
+ }
+ 
+ 
  ```  
  <hr>
  
