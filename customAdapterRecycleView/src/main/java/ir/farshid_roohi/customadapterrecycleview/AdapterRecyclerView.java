@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ir.farshid_roohi.customadapterrecycleview.listener.IProgressLayout;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
 import ir.farshid_roohi.customadapterrecycleview.viewHolder.ItemViewHolder;
 import ir.farshid_roohi.customadapterrecycleview.viewHolder.ProgressViewHolder;
@@ -23,7 +24,7 @@ import ir.farshid_roohi.customadapterrecycleview.viewHolder.ProgressViewHolder;
  * Created by Farshid Roohi.
  * CustomAdapterRecyclerView | Copyrights 1/1/19.
  */
-public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IProgressLayout {
 
     private static int ITEM_VIEW     = 0;
     private static int ITEM_PROGRESS = 1;
@@ -52,6 +53,11 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         this.list = items;
     }
 
+    @Override
+    public int onProgressLayout() {
+        return R.layout.proggress_view;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -67,7 +73,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         }
 
         ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context),
-                R.layout.proggress_view, viewGroup, false);
+                onProgressLayout(), viewGroup, false);
 
         return new ProgressViewHolder(binding);
     }
@@ -194,5 +200,4 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         }
         isLoading = false;
     }
-
 }

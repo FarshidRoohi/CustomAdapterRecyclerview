@@ -16,6 +16,12 @@ public class MyAdapter extends AdapterRecyclerView<String> {
         return R.layout.my_item;
     }
 
+    // optional method override layout progress custom
+    @Override
+    public int onProgressLayout() {
+        return R.layout.my_custom_progress_item;
+    }
+
     @Override
     public void onBindView(ViewDataBinding viewDataBinding, int position, int viewType, String element) {
         MyItemBinding itemBinding = (MyItemBinding) viewDataBinding;

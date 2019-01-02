@@ -13,6 +13,10 @@
             android:textSize="18sp"
             android:layout_height="wrap_content"
             android:padding="20dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:id="@+id/img_divider"/>
 
     </LinearLayout>
 
