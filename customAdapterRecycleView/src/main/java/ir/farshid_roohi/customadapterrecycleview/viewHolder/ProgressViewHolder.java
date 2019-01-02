@@ -9,11 +9,11 @@ import android.support.v7.widget.RecyclerView;
  */
 
 
-public class ViewHolderProgress extends RecyclerView.ViewHolder {
+public class ProgressViewHolder extends RecyclerView.ViewHolder {
 
     ViewDataBinding progressBinding;
 
-    public ViewHolderProgress(ViewDataBinding viewDataBinding) {
+    public ProgressViewHolder(ViewDataBinding viewDataBinding) {
         super(viewDataBinding.getRoot());
         progressBinding = viewDataBinding;
     }

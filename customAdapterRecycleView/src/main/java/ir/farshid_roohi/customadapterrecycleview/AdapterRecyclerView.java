@@ -7,6 +7,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,8 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
-import ir.farshid_roohi.customadapterrecycleview.viewHolder.ViewHolder;
-import ir.farshid_roohi.customadapterrecycleview.viewHolder.ViewHolderProgress;
+import ir.farshid_roohi.customadapterrecycleview.viewHolder.ItemViewHolder;
+import ir.farshid_roohi.customadapterrecycleview.viewHolder.ProgressViewHolder;
 
 /**
  * Created by Farshid Roohi.
@@ -25,9 +26,9 @@ import ir.farshid_roohi.customadapterrecycleview.viewHolder.ViewHolderProgress;
 public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static int ITEM_VIEW     = 0;
-    private static int ITEM_PROGRESS = 0;
+    private static int ITEM_PROGRESS = 1;
 
-    private List<T>            list;
+    private List<T>            list = new ArrayList<>();
     private Context            context;
     private OnLoadMoreListener onLoadMoreListener;
 
@@ -57,17 +58,18 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
         this.context = viewGroup.getContext();
 
-        if (viewType == ITEM_PROGRESS) {
-            ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),
+
+        if (viewType == ITEM_VIEW) {
+            ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context),
                     getItemLayout(viewType), viewGroup, false);
 
-            return new ViewHolder(binding);
+            return new ItemViewHolder(binding);
         }
 
-        ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()),
+        ViewDataBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context),
                 R.layout.proggress_view, viewGroup, false);
 
-        return new ViewHolderProgress(binding);
+        return new ProgressViewHolder(binding);
     }
 
     @Override
@@ -75,11 +77,11 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
         T element = null;
 
-        if (list != null && !list.isEmpty()) {
+        if (!list.isEmpty()) {
             element = list.get(position);
         }
-        if (viewHolder instanceof ViewHolder) {
-            onBindView(((ViewHolder) viewHolder).binding, position, viewHolder.getItemViewType(), element);
+        if (viewHolder instanceof ItemViewHolder) {
+            onBindView(((ItemViewHolder) viewHolder).binding, position, viewHolder.getItemViewType(), element);
         }
     }
 
@@ -88,8 +90,13 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         return this.list == null ? 0 : this.list.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return list.get(position) == null ? ITEM_PROGRESS : ITEM_VIEW;
+    }
+
     public void remove(int position) {
-        if (this.list == null || this.list.isEmpty()) {
+        if (this.list.isEmpty()) {
             return;
         }
         this.list.remove(position);
@@ -97,7 +104,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     }
 
     public void remove(T... item) {
-        if (this.list == null || this.list.isEmpty()) {
+        if (this.list.isEmpty()) {
             return;
         }
         this.list.removeAll(new ArrayList<>(Arrays.asList(item)));
@@ -105,7 +112,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     }
 
     public void removeAll() {
-        if (this.list == null || this.list.isEmpty()) {
+        if (this.list.isEmpty()) {
             return;
         }
         this.list.clear();
@@ -114,9 +121,6 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
     public void addItem(T... item) {
         this.hiddenLoading();
-        if (this.list == null) {
-            this.list = new ArrayList<>();
-        }
         List<T> items = new ArrayList<>(Arrays.asList(item));
         this.list.addAll(items);
         notifyItemRangeChanged(getItemCount() - items.size(), getItemCount());
@@ -124,7 +128,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
     public void addItems(List<T> items) {
         this.hiddenLoading();
-        this.list = items;
+        this.list.addAll(items);
         this.notifyDataSetChanged();
     }
 
@@ -147,8 +151,6 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
     private void initRecyclerViewListener(RecyclerView recyclerView) {
 
-        if (this.onLoadMoreListener == null) return;
-
         if (recyclerView == null) return;
 
         if (!(recyclerView.getLayoutManager() instanceof LinearLayoutManager)) return;
@@ -159,6 +161,8 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
+                if (onLoadMoreListener == null) return;
 
                 totalItemCount = linearLayoutManager.getItemCount();
                 visibleTotalCount = linearLayoutManager.getChildCount();
@@ -177,17 +181,14 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     }
 
     public void showLoading() {
-        if (this.list == null) {
-            return;
-        }
         this.list.add(null);
-        this.notifyItemInserted(getItemCount() - 1);
+        this.notifyItemInserted(list.size() - 1);
         isLoading = true;
 
     }
 
     public void hiddenLoading() {
-        if (this.list != null && getItemCount() != 0 && isLoading) {
+        if (getItemCount() != 0 && isLoading) {
             this.list.remove(getItemCount() - 1);
             this.notifyItemRemoved(getItemCount());
         }

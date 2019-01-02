@@ -9,10 +9,10 @@ import android.support.v7.widget.RecyclerView;
  */
 
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class ItemViewHolder extends RecyclerView.ViewHolder {
     public ViewDataBinding binding;
 
-    public ViewHolder(ViewDataBinding viewDataBinding) {
+    public ItemViewHolder(ViewDataBinding viewDataBinding) {
         super(viewDataBinding.getRoot());
         this.binding = viewDataBinding;
     }
