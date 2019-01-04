@@ -10,15 +10,6 @@ simple use android recyclerView adapter and endlessScrolled in android support l
 ```Gradle  
   implementation 'com.android.support:recyclerview-v7:28.0.0'
   implementation 'ir.farshid_roohi:customAdapterRecycleView:0.1'
- 
- allprojects {
-     repositories {
-         google()
-         jcenter()
-         maven { url "https://dl.bintray.com/farshidroohi/CustomAdapterRecyclerview" }
-     }
- }
- 
  ```  
  <hr>
  
