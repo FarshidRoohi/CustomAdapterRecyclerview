@@ -25,27 +25,28 @@ public class MainActivity extends AppCompatActivity {
         final MyAdapter adapter = new MyAdapter();
         adapter.endLessScrolled(recyclerView);
         adapter.addItems(getTempItems());
+        adapter.endLessScrolled(recyclerView);
+
         recyclerView.setAdapter(adapter);
+
 
         adapter.setOnClickItemListener(recyclerView, new OnClickItemListener<String>() {
             @Override
             public void onClickItem(int position, String element) {
-                Toast.makeText(getApplicationContext(), "item clicked : " + element + "position : " + position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "item click : " + element, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClickItem(int position, String element) {
-                Toast.makeText(getApplicationContext(), "item long click : " + element + "position : " + position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "item long click : " + element, Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        adapter.endLessScrolled(recyclerView);
 
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-
                 adapter.showLoading();
 
                 // request or load other items...
@@ -54,18 +55,16 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         adapter.addItems(getTempItems());
                     }
-                }, 3000);
+                }, 2500);
             }
         });
     }
 
-    int countItemTemp = 0;
-
     public List<String> getTempItems() {
         List<String> items = new ArrayList<>();
 
-        for (int i = countItemTemp; i <= 15; i++) {
-            items.add("item #" + new Random().nextInt(1000));
+        for (int i = 0; i <= 15; i++) {
+            items.add("item ");
         }
 
         return items;
