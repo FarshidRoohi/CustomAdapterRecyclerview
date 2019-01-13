@@ -9,7 +9,7 @@ simple use android recyclerView adapter and endlessScrolled in android support l
   
 ```Gradle  
   implementation 'com.android.support:recyclerview-v7:28.0.0'
-  implementation 'ir.farshid_roohi:customAdapterRecycleView:0.1'
+  implementation 'ir.farshid_roohi:customAdapterRecycleView:0.2'
  ```  
  <hr>
  
@@ -62,38 +62,59 @@ public class MyAdapter extends AdapterRecyclerView<String> {
 ```
 
 ```Java
-RecyclerView recyclerView = findViewById(R.id.recycler_view);  
-  
-final MyAdapter adapter      = new MyAdapter();  
-adapter.endLessScrolled(recyclerView);  
-adapter.addItems(getTempItems());  
-recyclerView.setAdapter(adapter);  
-  
-adapter.endLessScrolled(recyclerView);  
-  
-adapter.setOnLoadMoreListener(new OnLoadMoreListener() {  
-  @Override  
-  public void onLoadMore() {  
-  
-  adapter.showLoading();  
-  
-  // request or load other items...  
-  new Handler().postDelayed(new Runnable() {  
-  @Override  
-  public void run() {  
-  adapter.addItems(getTempItems());  
- } }, 3000);  
- }});
-int countItemTemp = 0;  
-  
-public List<String> getTempItems() {  
-  List<String> items = new ArrayList<>();  
-  
-  for (int i = countItemTemp; i <= 15; i++) {  
-  items.add("item #" + new Random().nextInt(1000));  
- }  
-  return items;  
-}
+ RecyclerView recyclerView = findViewById(R.id.recycler_view);
+
+        final MyAdapter adapter = new MyAdapter();
+        adapter.endLessScrolled(recyclerView);
+        adapter.addItems(getTempItems());
+        adapter.endLessScrolled(recyclerView);
+
+        recyclerView.setAdapter(adapter);
+
+
+        // handled click item in recyclerView
+        adapter.setOnClickItemListener(recyclerView, new OnClickItemListener<String>() {
+            @Override
+            public void onClickItem(int position, String element) {
+                Toast.makeText(getApplicationContext(), "item click : " + element, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClickItem(int position, String element) {
+                Toast.makeText(getApplicationContext(), "item long click : " + element, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+        // handled endless recyclerView
+        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                adapter.showLoading();
+
+                // request or load other items...
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.addItems(getTempItems());
+                    }
+                }, 2500);
+            }
+        });
+        
+        
+        
+ // get temp list item
+    public List<String> getTempItems() {
+        List<String> items = new ArrayList<>();
+
+        for (int i = 0; i <= 15; i++) {
+            items.add("item ");
+        }
+
+        return items;
+    }
 ```
  ##### screenShot: 
  
