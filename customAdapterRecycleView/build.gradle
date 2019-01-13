@@ -25,7 +25,7 @@ android {
 
 }
 group = 'ir.farshid_roohi'
-version = '0.1'
+version = '0.2'
 
 
 task generateSourcesJar(type: Jar) {
@@ -52,8 +52,8 @@ artifacts {
 }
 
 bintray {
-    user = 'xxxx'
-    key = 'xxxx'
+    user = 'xxx'
+    key = 'xxx'
     pkg {
 
         repo = 'CustomAdapterRecyclerview'
@@ -61,10 +61,10 @@ bintray {
         userOrg = ''
 
         version {
-            name = '0.1'
+            name = '0.2'
             desc = 'Custom Adapter RecyclerView'
             released = new Date()
-            vcsTag = '0.1'
+            vcsTag = '0.2'
         }
 
         licenses = ['Apache-2.0']
