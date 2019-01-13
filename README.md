@@ -1,5 +1,7 @@
 # Custom Adapter RecyclerView
 
+[ ![Download](https://api.bintray.com/packages/farshidroohi/CustomAdapterRecyclerview/CustomAdapterRecyclerview/images/download.svg?version=0.2) ](https://bintray.com/farshidroohi/CustomAdapterRecyclerview/CustomAdapterRecyclerview/0.2/link)
+
 simple use android recyclerView adapter and endlessScrolled in android support library recyclerView 
 
 - clean uses
