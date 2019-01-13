@@ -5,9 +5,9 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -16,7 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import ir.farshid_roohi.customadapterrecycleview.listener.IProgressLayout;
+import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
+import ir.farshid_roohi.customadapterrecycleview.listener.RecyclerTouchListener;
 import ir.farshid_roohi.customadapterrecycleview.viewHolder.ItemViewHolder;
 import ir.farshid_roohi.customadapterrecycleview.viewHolder.ProgressViewHolder;
 
@@ -40,7 +42,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     @LayoutRes
     public abstract int getItemLayout(int viewType);
 
-    public abstract void onBindView(ViewDataBinding binding, int position, int viewType, T element);
+    public abstract void onBindView(ViewDataBinding binding, ItemViewHolder viewHolder, int position, int viewType, T element);
 
     public AdapterRecyclerView() {
     }
@@ -80,14 +82,9 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-
-        T element = null;
-
-        if (!list.isEmpty()) {
-            element = list.get(position);
-        }
         if (viewHolder instanceof ItemViewHolder) {
-            onBindView(((ItemViewHolder) viewHolder).binding, position, viewHolder.getItemViewType(), element);
+
+            onBindView(((ItemViewHolder) viewHolder).binding, ((ItemViewHolder) viewHolder), position, viewHolder.getItemViewType(), getItem(position));
         }
     }
 
@@ -186,6 +183,12 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         });
     }
 
+    @Nullable
+    public T getItem(int position) {
+        if (list.isEmpty()) return null;
+        return list.get(position);
+    }
+
     public void showLoading() {
         this.list.add(null);
         this.notifyItemInserted(list.size() - 1);
@@ -200,4 +203,20 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         }
         isLoading = false;
     }
+
+
+    public void setOnClickItemListener(RecyclerView recyclerView, final OnClickItemListener<T> listener) {
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(context, recyclerView, new RecyclerTouchListener.OnItemListenerRecyclerViewListener() {
+            @Override
+            public void onClick(int position) {
+                listener.onClickItem(position, list.get(position));
+            }
+            @Override
+            public void onLongClick(int position) {
+                listener.onLongClickItem(position, list.get(position));
+            }
+        }));
+    }
+
 }
