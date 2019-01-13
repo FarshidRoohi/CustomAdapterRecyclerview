@@ -5,9 +5,9 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -40,7 +40,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     @LayoutRes
     public abstract int getItemLayout(int viewType);
 
-    public abstract void onBindView(ViewDataBinding binding, int position, int viewType, T element);
+    public abstract void onBindView(ViewDataBinding binding, ItemViewHolder viewHolder, int position, int viewType, T element);
 
     public AdapterRecyclerView() {
     }
@@ -80,14 +80,9 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-
-        T element = null;
-
-        if (!list.isEmpty()) {
-            element = list.get(position);
-        }
         if (viewHolder instanceof ItemViewHolder) {
-            onBindView(((ItemViewHolder) viewHolder).binding, position, viewHolder.getItemViewType(), element);
+
+            onBindView(((ItemViewHolder) viewHolder).binding, ((ItemViewHolder) viewHolder), position, viewHolder.getItemViewType(), getItem(position));
         }
     }
 
@@ -184,6 +179,12 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
                 }
             }
         });
+    }
+
+    @Nullable
+    public T getItem(int position) {
+        if (list.isEmpty()) return null;
+        return list.get(position);
     }
 
     public void showLoading() {

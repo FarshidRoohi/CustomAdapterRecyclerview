@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding;
 
 import ir.farshid_roohi.customadapterrecyclerview.databinding.MyItemBinding;
 import ir.farshid_roohi.customadapterrecycleview.AdapterRecyclerView;
+import ir.farshid_roohi.customadapterrecycleview.viewHolder.ItemViewHolder;
 
 /**
  * Created by Farshid Roohi.
@@ -16,15 +17,19 @@ public class MyAdapter extends AdapterRecyclerView<String> {
         return R.layout.my_item;
     }
 
-    // optional method override layout progress custom
     @Override
     public int onProgressLayout() {
         return R.layout.my_custom_progress_item;
     }
 
     @Override
-    public void onBindView(ViewDataBinding viewDataBinding, int position, int viewType, String element) {
-        MyItemBinding itemBinding = (MyItemBinding) viewDataBinding;
+    public void onBindView(ViewDataBinding viewDataBinding, ItemViewHolder viewHolder, int position, int viewType, String element) {
+        if (viewDataBinding == null || element == null) {
+            return;
+        }
+        final MyItemBinding itemBinding = (MyItemBinding) viewDataBinding;
         itemBinding.txtTitle.setText(element);
     }
 }
+
+
