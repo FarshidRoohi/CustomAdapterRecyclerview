@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
+        // handled click item in recyclerView
         adapter.setOnClickItemListener(recyclerView, new OnClickItemListener<String>() {
             @Override
             public void onClickItem(int position, String element) {
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        // handled endless recyclerView
         adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // get temp list item
     public List<String> getTempItems() {
         List<String> items = new ArrayList<>();
 
