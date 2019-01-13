@@ -16,7 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import ir.farshid_roohi.customadapterrecycleview.listener.IProgressLayout;
+import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
+import ir.farshid_roohi.customadapterrecycleview.listener.RecyclerTouchListener;
 import ir.farshid_roohi.customadapterrecycleview.viewHolder.ItemViewHolder;
 import ir.farshid_roohi.customadapterrecycleview.viewHolder.ProgressViewHolder;
 
@@ -201,4 +203,20 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
         }
         isLoading = false;
     }
+
+
+    public void setOnClickItemListener(RecyclerView recyclerView, final OnClickItemListener<T> listener) {
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(context, recyclerView, new RecyclerTouchListener.OnItemListenerRecyclerViewListener() {
+            @Override
+            public void onClick(int position) {
+                listener.onClickItem(position, list.get(position));
+            }
+            @Override
+            public void onLongClick(int position) {
+                listener.onLongClickItem(position, list.get(position));
+            }
+        }));
+    }
+
 }

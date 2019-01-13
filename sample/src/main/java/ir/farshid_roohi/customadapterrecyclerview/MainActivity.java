@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,12 +20,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView    recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-        final MyAdapter adapter      = new MyAdapter();
+        final MyAdapter adapter = new MyAdapter();
         adapter.endLessScrolled(recyclerView);
         adapter.addItems(getTempItems());
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnClickItemListener(recyclerView, new OnClickItemListener<String>() {
+            @Override
+            public void onClickItem(int position, String element) {
+                Toast.makeText(getApplicationContext(), "item clicked : " + element + "position : " + position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClickItem(int position, String element) {
+                Toast.makeText(getApplicationContext(), "item long click : " + element + "position : " + position, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         adapter.endLessScrolled(recyclerView);
 
