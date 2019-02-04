@@ -9,6 +9,14 @@ simple use android recyclerView adapter and endlessScrolled in android support l
 - clean uses
 - ability add custom layout in progress pagination and default layout
 
+ ###### via gradle (<p>Androidx</p>):   
+  
+```Gradle  
+  implementation 'androidx.recyclerview:recyclerview:1.0.0'
+  implementation 'ir.farshid_roohi:customAdapterRecycleView:1.0.0'
+ ```  
+ <hr>
+
  ###### via gradle:   
   
 ```Gradle  
