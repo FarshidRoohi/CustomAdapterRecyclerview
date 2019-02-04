@@ -1,6 +1,6 @@
 package ir.farshid_roohi.customadapterrecyclerview;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 
 import ir.farshid_roohi.customadapterrecyclerview.databinding.MyItemBinding;
 import ir.farshid_roohi.customadapterrecycleview.AdapterRecyclerView;

@@ -1,6 +1,6 @@
 package ir.farshid_roohi.customadapterrecycleview.listener;
 
-import android.support.annotation.LayoutRes;
+import androidx.annotation.LayoutRes;
 
 /**
  * Created by Farshid Roohi.
