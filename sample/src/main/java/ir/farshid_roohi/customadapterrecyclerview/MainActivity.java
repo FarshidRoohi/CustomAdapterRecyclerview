@@ -2,13 +2,16 @@ package ir.farshid_roohi.customadapterrecyclerview;
 
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
 
@@ -20,12 +23,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
         final MyAdapter adapter = new MyAdapter();
         adapter.endLessScrolled(recyclerView);
         adapter.addItems(getTempItems());
-        adapter.endLessScrolled(recyclerView);
-
         recyclerView.setAdapter(adapter);
 
 
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     public List<String> getTempItems() {
         List<String> items = new ArrayList<>();
 
-        for (int i = 0; i <= 15; i++) {
+        for (int i = 0; i <= 25; i++) {
             items.add("item ");
         }
 

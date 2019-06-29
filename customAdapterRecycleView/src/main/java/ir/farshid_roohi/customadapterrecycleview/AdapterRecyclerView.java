@@ -1,20 +1,25 @@
 package ir.farshid_roohi.customadapterrecycleview;
 
 import android.content.Context;
+
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import ir.farshid_roohi.customadapterrecycleview.listener.IProgressLayout;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
@@ -155,10 +160,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     private void initRecyclerViewListener(RecyclerView recyclerView) {
 
         if (recyclerView == null) return;
-
-        if (!(recyclerView.getLayoutManager() instanceof LinearLayoutManager)) return;
-
-        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -166,10 +168,24 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (onLoadMoreListener == null) return;
+                if (layoutManager == null) return;
 
-                totalItemCount = linearLayoutManager.getItemCount();
-                visibleTotalCount = linearLayoutManager.getChildCount();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                totalItemCount = layoutManager.getItemCount();
+                visibleTotalCount = layoutManager.getChildCount();
+
+
+                if (layoutManager instanceof GridLayoutManager) {
+                    lastVisibleItem = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+                } else if (layoutManager instanceof LinearLayoutManager) {
+                    lastVisibleItem = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                    StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
+
+                    int   spanCount     = staggeredGridLayoutManager.getSpanCount();
+                    int[] lastPositions = staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(new int[spanCount]);
+                    lastVisibleItem = Math.max(lastPositions[0], lastPositions[1]);
+                }
+
 
                 if (totalItemCount <= visibleTotalCount) {
                     return;
@@ -212,6 +228,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
             public void onClick(int position) {
                 listener.onClickItem(position, list.get(position));
             }
+
             @Override
             public void onLongClick(int position) {
                 listener.onLongClickItem(position, list.get(position));
