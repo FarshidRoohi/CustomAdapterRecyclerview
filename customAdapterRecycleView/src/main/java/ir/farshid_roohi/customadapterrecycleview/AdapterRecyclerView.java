@@ -1,24 +1,21 @@
 package ir.farshid_roohi.customadapterrecycleview;
 
 import android.content.Context;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import ir.farshid_roohi.customadapterrecycleview.listener.IProgressLayout;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
@@ -36,9 +33,10 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     private static int ITEM_VIEW     = 0;
     private static int ITEM_PROGRESS = 1;
 
-    private List<T>            list = new ArrayList<>();
-    private Context            context;
-    private OnLoadMoreListener onLoadMoreListener;
+    private List<T>                    list = new ArrayList<>();
+    private Context                    context;
+    private OnLoadMoreListener         onLoadMoreListener;
+    private RecyclerView.LayoutManager layoutManager;
 
     private boolean isLoading;
     private int     totalItemCount, visibleTotalCount, lastVisibleItem;
@@ -86,11 +84,18 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         if (viewHolder instanceof ItemViewHolder) {
-
             onBindView(((ItemViewHolder) viewHolder).binding, ((ItemViewHolder) viewHolder), position, viewHolder.getItemViewType(), getItem(position));
+        } else if (viewHolder instanceof ProgressViewHolder) {
+            // When we use the staggered grid layout manager, change span size because show progressView single row
+            if (layoutManager != null && layoutManager instanceof StaggeredGridLayoutManager) {
+                StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) viewHolder.itemView.getLayoutParams();
+                layoutParams.setFullSpan(isLoading);
+            }
         }
+
+
     }
 
     @Override
@@ -160,7 +165,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     private void initRecyclerViewListener(RecyclerView recyclerView) {
 
         if (recyclerView == null) return;
-        final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        this.layoutManager = recyclerView.getLayoutManager();
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -207,17 +212,48 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
     public void showLoading() {
         this.list.add(null);
-        this.notifyItemInserted(list.size() - 1);
-        isLoading = true;
+        final int index = list.size() - 1;
+        this.notifyItemInserted(index);
+        this.isLoading = true;
+        handledShowProgressViewRow(index);
 
     }
 
+    // When we use the grid, change span size because show progressView single row
+    private void handledShowProgressViewRow(final int index) {
+        if (layoutManager != null && layoutManager instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = ((GridLayoutManager) layoutManager);
+            final int         spanCount         = gridLayoutManager.getSpanCount();
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (isLoading && position == index && list.get(index) == null) {
+                        return spanCount;
+                    }
+                    return 1;
+                }
+            });
+        }
+    }
+
     public void hiddenLoading() {
+
         if (getItemCount() != 0 && isLoading) {
             this.list.remove(getItemCount() - 1);
             this.notifyItemRemoved(getItemCount());
         }
         isLoading = false;
+
+        if (layoutManager != null && layoutManager instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = ((GridLayoutManager) layoutManager);
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return 1;
+                }
+            });
+        }
+
     }
 
 
