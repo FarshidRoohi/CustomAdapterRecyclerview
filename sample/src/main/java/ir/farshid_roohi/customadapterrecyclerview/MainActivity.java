@@ -2,17 +2,14 @@ package ir.farshid_roohi.customadapterrecyclerview;
 
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
 
@@ -53,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
             public void onLoadMore() {
                 adapter.showLoading();
 
-                // request or load other items...
+                // fake request or load other items...
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         adapter.addItems(getTempItems());
                     }
-                }, 2500);
+                }, 2000);
             }
         });
     }
@@ -68,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     public List<String> getTempItems() {
         List<String> items = new ArrayList<>();
 
-        for (int i = 0; i <= 25; i++) {
+        for (int i = 0; i <= 15; i++) {
             items.add("item ");
         }
 
