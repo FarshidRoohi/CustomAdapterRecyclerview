@@ -4,10 +4,16 @@
   ![API](https://img.shields.io/badge/API-18%2B-blue.svg?style=flat)
 
 
-simple use android recyclerView adapter and endlessScrolled in android support library recyclerView 
+Very simple use android recyclerView adapter and endlessScrolled in android support library recyclerView 
 
-- clean uses
-- ability add custom layout in progress pagination and default layout
+- =Clean uses
+- Ability add custom layout in progress pagination and default layout
+- Support linear, Grid, StaggeredGrid LayoutManger for endless and show layout progressView
+
+##### screenShot: 
+ 
+ <img src="https://raw.githubusercontent.com/FarshidRoohi/CustomAdapterRecyclerview/master/art/custom_adapter.gif" alt="screen show" width="270px" height="500px">
+
 
  ###### via gradle (Androidx):   
   
@@ -21,7 +27,7 @@ simple use android recyclerView adapter and endlessScrolled in android support l
   
 ```Gradle  
   implementation 'com.android.support:recyclerview-v7:28.0.0'
-  implementation 'ir.farshid_roohi:customAdapterRecycleView:0.2'
+  implementation 'ir.farshid_roohi:customAdapterRecycleView:0.3'
  ```  
  <hr>
  
@@ -74,13 +80,12 @@ public class MyAdapter extends AdapterRecyclerView<String> {
 ```
 
 ```Java
- RecyclerView recyclerView = findViewById(R.id.recycler_view);
-
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        
         final MyAdapter adapter = new MyAdapter();
         adapter.endLessScrolled(recyclerView);
         adapter.addItems(getTempItems());
-        adapter.endLessScrolled(recyclerView);
-
         recyclerView.setAdapter(adapter);
 
 
@@ -128,6 +133,3 @@ public class MyAdapter extends AdapterRecyclerView<String> {
         return items;
     }
 ```
- ##### screenShot: 
- 
- <img src="https://raw.githubusercontent.com/FarshidRoohi/CustomAdapterRecyclerview/master/art/img.png" alt="screen show" width="270px" height="500px">
