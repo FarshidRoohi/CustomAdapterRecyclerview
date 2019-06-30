@@ -49,8 +49,6 @@ artifacts {
 }
 
 group = 'ir.farshid_roohi'
-version = '1.0.1'
-
 
 bintray {
     user = 'xxx'
@@ -62,10 +60,10 @@ bintray {
         userOrg = ''
 
         version {
-            name = version
+            name = '1.0.1'
             desc = 'Custom Adapter RecyclerView'
             released = new Date()
-            vcsTag = version
+            vcsTag = '1.0.1'
         }
 
         licenses = ['Apache-2.0']
