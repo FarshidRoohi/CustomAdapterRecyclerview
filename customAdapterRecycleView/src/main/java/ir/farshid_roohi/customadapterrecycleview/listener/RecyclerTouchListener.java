@@ -1,7 +1,10 @@
 package ir.farshid_roohi.customadapterrecycleview.listener;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,8 +15,8 @@ import android.view.View;
  */
 public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
-    private GestureDetector gestureDetector;
-    private OnItemListenerRecyclerViewListener   clickListener;
+    private GestureDetector                    gestureDetector;
+    private OnItemListenerRecyclerViewListener clickListener;
 
     public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final OnItemListenerRecyclerViewListener clickListener) {
         this.clickListener = clickListener;
@@ -34,7 +37,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
 
         View child = rv.findChildViewUnder(e.getX(), e.getY());
         if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
@@ -44,7 +47,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
     }
 
     @Override
-    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
     }
 
     @Override
