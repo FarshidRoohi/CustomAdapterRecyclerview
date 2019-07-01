@@ -15,7 +15,7 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
  <img src="https://raw.githubusercontent.com/FarshidRoohi/CustomAdapterRecyclerview/master/art/custom_adapter.gif" alt="screen show" width="270px" height="450px">
 
 
- ###### via gradle (Androidx):   
+ ###### gradle :   
   
 ```Gradle  
   implementation 'androidx.recyclerview:recyclerview:1.0.0'
