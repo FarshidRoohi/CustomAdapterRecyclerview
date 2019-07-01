@@ -47,12 +47,12 @@ artifacts {
     archives generateJavadocsJar
     archives generateSourcesJar
 }
-
 group = 'ir.farshid_roohi'
+version = '1.0.3'
 
 bintray {
-    user = 'xxx'
-    key = 'xxx'
+    user = 'xxxx'
+    key = 'xxxx'
     pkg {
 
         repo = 'CustomAdapterRecyclerview'
@@ -60,10 +60,10 @@ bintray {
         userOrg = ''
 
         version {
-            name = '1.0.1'
+            name = '1.0.3'
             desc = 'Custom Adapter RecyclerView'
             released = new Date()
-            vcsTag = '1.0.1'
+            vcsTag = '1.0.3'
         }
 
         licenses = ['Apache-2.0']
