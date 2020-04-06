@@ -4,10 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import ir.farshid_roohi.customadapterrecycleview.listener.IProgressLayout;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnClickItemListener;
 import ir.farshid_roohi.customadapterrecycleview.listener.OnLoadMoreListener;
@@ -30,16 +31,16 @@ import ir.farshid_roohi.customadapterrecycleview.viewHolder.ProgressViewHolder;
  */
 public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IProgressLayout {
 
-    private static int ITEM_VIEW     = 0;
+    private static int ITEM_VIEW = 0;
     private static int ITEM_PROGRESS = 1;
 
-    private List<T>                    list = new ArrayList<>();
-    private Context                    context;
-    private OnLoadMoreListener         onLoadMoreListener;
+    private List<T> list = new ArrayList<>();
+    private Context context;
+    private OnLoadMoreListener onLoadMoreListener;
     private RecyclerView.LayoutManager layoutManager;
 
     private boolean isLoading;
-    private int     totalItemCount, visibleTotalCount, lastVisibleItem;
+    private int totalItemCount, visibleTotalCount, firstVisibleItem;
 
 
     @LayoutRes
@@ -180,28 +181,30 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
 
 
                 if (layoutManager instanceof GridLayoutManager) {
-                    lastVisibleItem = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    firstVisibleItem = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
                 } else if (layoutManager instanceof LinearLayoutManager) {
-                    lastVisibleItem = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    firstVisibleItem = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
                 } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                     StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
 
-                    int   spanCount     = staggeredGridLayoutManager.getSpanCount();
-                    int[] lastPositions = staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(new int[spanCount]);
-                    lastVisibleItem = Math.max(lastPositions[0], lastPositions[1]);
-                }
+                    int spanCount = staggeredGridLayoutManager.getSpanCount();
+                    int[] lastPositions = staggeredGridLayoutManager.findFirstVisibleItemPositions(new int[spanCount]);
+                    firstVisibleItem = Math.min(lastPositions[0], lastPositions[1]);
 
+                }
 
                 if (totalItemCount <= visibleTotalCount) {
                     return;
                 }
 
-                if (!isLoading && (lastVisibleItem + visibleTotalCount) >= totalItemCount) {
+                if (!isLoading && (firstVisibleItem + visibleTotalCount) >= totalItemCount) {
                     onLoadMoreListener.onLoadMore();
                     isLoading = true;
                 }
+
             }
         });
+
     }
 
     @Nullable
@@ -223,7 +226,7 @@ public abstract class AdapterRecyclerView<T> extends RecyclerView.Adapter<Recycl
     private void handledShowProgressViewRow(final int index) {
         if (layoutManager != null && layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = ((GridLayoutManager) layoutManager);
-            final int         spanCount         = gridLayoutManager.getSpanCount();
+            final int spanCount = gridLayoutManager.getSpanCount();
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
