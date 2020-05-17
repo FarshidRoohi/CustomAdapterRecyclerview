@@ -3,11 +3,11 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -48,7 +48,7 @@ artifacts {
     archives generateSourcesJar
 }
 group = 'ir.farshid_roohi'
-version = '1.0.4'
+version = '1.0.5'
 
 bintray {
     user = 'xxxx'
@@ -60,10 +60,10 @@ bintray {
         userOrg = ''
 
         version {
-            name = '1.0.4'
+            name = '1.0.5'
             desc = 'Custom Adapter RecyclerView'
             released = new Date()
-            vcsTag = '1.0.4'
+            vcsTag = '1.0.5'
         }
 
         licenses = ['Apache-2.0']
@@ -75,8 +75,8 @@ bintray {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
