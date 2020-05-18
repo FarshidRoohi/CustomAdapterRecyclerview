@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Custom Adapter RecyclerView</string>
+    <string name="retry">retry</string>
 </resources>
