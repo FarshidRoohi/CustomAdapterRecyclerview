@@ -46,8 +46,7 @@ class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progre
 
      private lateinit var myAdapter: MyAdapter
 
-        
-        private val tempItems: List<String>
+     private val tempItems: List<String>
             get() {
                 val items: MutableList<String> = ArrayList()
                 for (i in 0..21) {
@@ -56,7 +55,7 @@ class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progre
                 return items
             }
     
-        override fun onCreate(savedInstanceState: Bundle?) {
+      override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
     
@@ -73,9 +72,9 @@ class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progre
     
             initRecyclerView()
     
-        }
+       }
     
-        private fun initRecyclerView() {
+     private fun initRecyclerView() {
     
             recyclerView.apply {
                 layoutManager = GridLayoutManager(this@MainActivity, 2)
