@@ -9,7 +9,8 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
 
 - Clean uses
 - Ability add custom layout in progress pagination and default layout
-- Support linear, Grid, StaggeredGrid LayoutManger for endless and show layout progressView
+- Support linear, Grid, StaggeredGrid LayoutManger for endless
+- Manage Proggress and Error Layout in List
 
 ##### screenShot: 
  
