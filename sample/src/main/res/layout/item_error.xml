@@ -3,13 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="#3F51B5">
 
     <TextView
         android:id="@+id/retryTextView"
         android:layout_width="wrap_content"
-        android:text="@string/retry"
-        android:padding="8dp"
+        android:text="@string/error"
+        android:textColor="@android:color/white"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_height="wrap_content" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnTrayAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/try_again"/>
 
 </LinearLayout>

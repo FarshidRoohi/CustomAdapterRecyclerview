@@ -38,6 +38,9 @@ task generateJavadocsJar(type: Jar) {
     from generateJavadocs.destinationDir
     classifier 'javadoc'
 }
+tasks.withType(Javadoc).all {
+    enabled = false
+}
 
 generateJavadocsJar.dependsOn generateJavadocs
 
@@ -46,7 +49,7 @@ artifacts {
     archives generateSourcesJar
 }
 group = 'ir.farshid_roohi'
-version = '1.0.5'
+version = '2.0.0'
 
 bintray {
     user = 'xxxx'
@@ -58,10 +61,10 @@ bintray {
         userOrg = ''
 
         version {
-            name = '1.0.5'
+            name = '2.0.0'
             desc = 'Custom Adapter RecyclerView'
             released = new Date()
-            vcsTag = '1.0.5'
+            vcsTag = '2.0.0'
         }
 
         licenses = ['Apache-2.0']

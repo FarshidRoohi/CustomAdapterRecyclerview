@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Custom Adapter RecyclerView</string>
-    <string name="retry">retry</string>
+    <string name="error">Some Error…</string>
+    <string name="try_again">Tray Again</string>
 </resources>

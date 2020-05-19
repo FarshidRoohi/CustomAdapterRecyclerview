@@ -9,7 +9,8 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
 
 - Clean uses
 - Ability add custom layout in progress pagination and default layout
-- Support linear, Grid, StaggeredGrid LayoutManger for endless and show layout progressView
+- Support linear, Grid, StaggeredGrid LayoutManger for endless
+- Manage Proggress and Error Layout in List
 
 ##### screenShot: 
  
@@ -20,109 +21,90 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
   
 ```Gradle  
   implementation 'androidx.recyclerview:recyclerview:1.1.0'
-  implementation 'ir.farshid_roohi:customAdapterRecycleView:1.0.5'
+  implementation 'ir.farshid_roohi:customAdapterRecycleView:2.0.0'
  ```  
  <hr>
  
 > - Your project should support **DataBinding** 
 
-# How to use DataBinding on your project
-
-```Gradle
-  
-android {  
- dataBinding {  
-	  enabled = true  
-	  }
-	...
-  defaultConfig {  
-	...
-  }  
-  buildTypes {  
-  ...
- }  
-```
-for more information [It](https://developer.android.com/topic/libraries/data-binding)
-
-
 ## Example
 
 #### Sample Adapter 
 
-```Java
+```Kotiln
 
-public class MyAdapter extends AdapterRecyclerView<String> {
+class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progress_view, R.layout.item_error,R.id.btnTrayAgain) {
 
-    @Override
-    public int getItemLayout(int viewType) {
-        return R.layout.my_item;
+    override fun onBindView(viewHolder: ItemViewHolder, position: Int, context: Context, element: String?) {
+        val itemView = viewHolder.itemView
+        itemView.txt_title.setText("$element $position")
     }
 
-    // optional method override layout progress custom
-    @Override
-    public int onProgressLayout() {
-        return R.layout.my_custom_progress_item;
-    }
-
-    @Override
-    public void onBindView(ViewDataBinding viewDataBinding, int position, int viewType, String element) {
-        MyItemBinding itemBinding = (MyItemBinding) viewDataBinding;
-        itemBinding.txtTitle.setText(element);
-    }
 }
 ```
 
-```Java
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        
-        final MyAdapter adapter = new MyAdapter();
-        adapter.endLessScrolled(recyclerView);
-        adapter.addItems(getTempItems());
-        recyclerView.setAdapter(adapter);
+```Kotlin
 
+     private lateinit var myAdapter: MyAdapter
 
-        // handled click item in recyclerView
-        adapter.setOnClickItemListener(recyclerView, new OnClickItemListener<String>() {
-            @Override
-            public void onClickItem(int position, String element) {
-                Toast.makeText(getApplicationContext(), "item click : " + element, Toast.LENGTH_SHORT).show();
+     private val tempItems: List<String>
+            get() {
+                val items: MutableList<String> = ArrayList()
+                for (i in 0..21) {
+                    items.add("item ")
+                }
+                return items
             }
-
-            @Override
-            public void onLongClickItem(int position, String element) {
-                Toast.makeText(getApplicationContext(), "item long click : " + element, Toast.LENGTH_SHORT).show();
-
+    
+      override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+    
+            myAdapter = MyAdapter().also { adapter ->
+                adapter.onRetryClicked = {
+                    adapter.loadingState()
+                    // fake request or load other items...
+                    recyclerView.postDelayed({
+                        adapter.loadedState(tempItems)
+                    }, 2000)
+                }
             }
-        });
-
-
-        // handled endless recyclerView
-        adapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                adapter.showLoading();
-
-                // request or load other items...
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.addItems(getTempItems());
+            myAdapter.loadedState(tempItems)
+    
+            initRecyclerView()
+    
+       }
+    
+     private fun initRecyclerView() {
+    
+            recyclerView.apply {
+                layoutManager = GridLayoutManager(this@MainActivity, 2)
+                adapter = myAdapter
+    
+                // handled endless recyclerView
+                onLoadMoreListener {
+                    if (myAdapter.mustLoad) {
+                        myAdapter.loadingState()
+                        // failed state
+                        recyclerView.postDelayed({
+                            myAdapter.failedState()
+                        }, 2000)
                     }
-                }, 2500);
+                }
+    
+                // handled click item in recyclerView
+                onItemClickListener({ position ->
+                    if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
+                        return@onItemClickListener
+                    }
+                    Toast.makeText(applicationContext, "item click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
+                }, { position ->
+                    if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
+                        return@onItemClickListener
+                    }
+                    Toast.makeText(applicationContext, "item long click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
+                })
+    
             }
-        });
-        
-        
-        
- // get temp list item
-    public List<String> getTempItems() {
-        List<String> items = new ArrayList<>();
-
-        for (int i = 0; i <= 15; i++) {
-            items.add("item ");
         }
-
-        return items;
-    }
 ```
