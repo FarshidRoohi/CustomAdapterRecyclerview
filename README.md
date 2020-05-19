@@ -25,8 +25,6 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
  ```  
  <hr>
  
-> - Your project should support **DataBinding** 
-
 ## Example
 
 #### Sample Adapter 
