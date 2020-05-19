@@ -9,6 +9,9 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * Created by Farshid Roohi.
@@ -23,7 +26,7 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
         private const val ITEM_FAILED = 2
     }
 
-    private val list: MutableList<T?> = arrayListOf()
+    val items: MutableList<T?> = arrayListOf()
     private var lastItemItemState: ItemState = ItemState.LOADED
     private var layoutManager: RecyclerView.LayoutManager? = null
     var mustLoad: Boolean = false
@@ -92,7 +95,7 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
 
 
     override fun getItemCount(): Int {
-        return list.size
+        return items.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -115,15 +118,31 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
 
 
     fun removeAll() {
-        if (list.isEmpty()) {
+        if (items.isEmpty()) {
             return
         }
-        list.clear()
+        items.clear()
+        notifyDataSetChanged()
+    }
+
+    fun remove(position: Int) {
+        if (this.items.isEmpty() || position > this.items.lastIndex) {
+            return
+        }
+        this.items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun remove(vararg item: T) {
+        if (this.items.isEmpty()) {
+            return
+        }
+        this.items.removeAll(item)
         notifyDataSetChanged()
     }
 
     fun getItem(position: Int): T? {
-        return if (list.isEmpty()) null else list[position]
+        return if (items.isEmpty()) null else items[position]
     }
 
 
@@ -135,15 +154,15 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
 
         var addedPosition = 0
 
-        if (list.isNotEmpty()) {
+        if (items.isNotEmpty()) {
             addedPosition = itemCount
             if (lastItemItemState != ItemState.LOADED) {
-                list.removeAt(list.lastIndex)
+                items.removeAt(items.lastIndex)
             }
         }
 
         lastItemItemState = ItemState.LOADED
-        list.addAll(newItems)
+        items.addAll(newItems)
 
         if (addedPosition == 0) {
             notifyDataSetChanged()
@@ -156,13 +175,13 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
     fun failedState() {
 
         if (lastItemItemState == ItemState.LOADING) {
-            list.removeAt(list.lastIndex)
+            items.removeAt(items.lastIndex)
         }
 
         lastItemItemState = ItemState.FAILED
-        list.add(null)
+        items.add(null)
 
-        notifyItemChanged(list.lastIndex)
+        notifyItemChanged(items.lastIndex)
 
     }
 
@@ -171,19 +190,19 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
 
         var changed = false
 
-        if (list.isNotEmpty() && lastItemItemState != ItemState.LOADED) {
-            list.removeAt(list.lastIndex)
+        if (items.isNotEmpty() && lastItemItemState != ItemState.LOADED) {
+            items.removeAt(items.lastIndex)
             changed = true
         }
 
         lastItemItemState = ItemState.LOADING
-        list.add(null)
+        items.add(null)
 
         if (changed) {
-            notifyItemChanged(list.lastIndex)
+            notifyItemChanged(items.lastIndex)
             return
         }
-        notifyItemInserted(list.lastIndex)
+        notifyItemInserted(items.lastIndex)
     }
 
 
@@ -206,7 +225,7 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
             val spanCount = gridLayoutManager.spanCount
             gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return if ((lastItemItemState == ItemState.LOADING || lastItemItemState == ItemState.FAILED) && position == index && list[index] == null) {
+                    return if ((lastItemItemState == ItemState.LOADING || lastItemItemState == ItemState.FAILED) && position == index && items[index] == null) {
                         spanCount
                     } else 1
                 }
