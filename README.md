@@ -21,12 +21,10 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
   
 ```Gradle  
   implementation 'androidx.recyclerview:recyclerview:1.1.0'
-  implementation 'ir.farshid_roohi:customAdapterRecycleView:2.0.0'
+  implementation 'ir.farshid_roohi:customAdapterRecycleView:2.0.1'
  ```  
  <hr>
  
-> - Your project should support **DataBinding** 
-
 ## Example
 
 #### Sample Adapter 
