@@ -50,7 +50,9 @@ fun RecyclerView.onLoadMoreListener(extraCount: Int = 0, onLoadMore: () -> Unit)
             }
 
             if (firstVisibleItem + visibleTotalCount + extraCount >= totalItemCount) {
-                onLoadMore.invoke()
+                recyclerView.post { // Prevent <<Inconsistency detected. Invalid item position... RecyclerView>> Bug
+                    onLoadMore.invoke()
+                }
             }
 
         }
