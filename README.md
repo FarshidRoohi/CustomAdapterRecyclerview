@@ -10,7 +10,7 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
 - Clean uses
 - Ability add custom layout in progress pagination and default layout
 - Support linear, Grid, StaggeredGrid LayoutManger for endless
-- Manage Proggress and Error Layout in List
+- Manage Loading and Error Layout in The List Row
 
 ##### screenShot: 
  
@@ -43,66 +43,46 @@ class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progre
 
 ```Kotlin
 
-     private lateinit var myAdapter: MyAdapter
+    val myAdapter = MyAdapter()
 
-     private val tempItems: List<String>
-            get() {
-                val items: MutableList<String> = ArrayList()
-                for (i in 0..21) {
-                    items.add("item ")
-                }
-                return items
-            }
-    
-      override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
-    
-            myAdapter = MyAdapter().also { adapter ->
-                adapter.onRetryClicked = {
-                    adapter.loadingState()
-                    // fake request or load other items...
-                    recyclerView.postDelayed({
-                        adapter.loadedState(tempItems)
-                    }, 2000)
-                }
-            }
-            myAdapter.loadedState(tempItems)
-    
-            initRecyclerView()
-    
-       }
-    
-     private fun initRecyclerView() {
-    
-            recyclerView.apply {
-                layoutManager = GridLayoutManager(this@MainActivity, 2)
-                adapter = myAdapter
-    
-                // handled endless recyclerView
-                onLoadMoreListener {
-                    if (myAdapter.mustLoad) {
-                        myAdapter.loadingState()
-                        // failed state
-                        recyclerView.postDelayed({
-                            myAdapter.failedState()
-                        }, 2000)
-                    }
-                }
-    
-                // handled click item in recyclerView
-                onItemClickListener({ position ->
-                    if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
-                        return@onItemClickListener
-                    }
-                    Toast.makeText(applicationContext, "item click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
-                }, { position ->
-                    if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
-                        return@onItemClickListener
-                    }
-                    Toast.makeText(applicationContext, "item long click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
-                })
-    
-            }
-        }
+           // onClick Error Button
+           myAdapter.onRetryClicked = {
+               myAdapter.loadingState()
+               // fake request or load other items...
+               recyclerView.postDelayed({
+                   myAdapter.loadedState(tempItems)
+               }, 2000)
+           }
+
+           // set Data in List
+           myAdapter.loadedState(tempItems)
+
+           recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
+           recyclerView.adapter = myAdapter
+
+
+           // set onLoad More Listener for Pagination
+           recyclerView.onLoadMoreListener {
+               if (myAdapter.mustLoad) {
+                   myAdapter.loadingState()
+                   // failed state
+                   recyclerView.postDelayed({
+                       myAdapter.failedState()
+                   }, 2000)
+               }
+           }
+
+
+           // Set onClick Item Listener
+           recyclerView.onItemClickListener({ position ->
+               if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
+                   return@onItemClickListener
+               }
+               Toast.makeText(applicationContext, "item click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
+           }, { position ->
+               if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
+                   return@onItemClickListener
+               }
+               Toast.makeText(applicationContext, "item long click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
+           })
 ```
