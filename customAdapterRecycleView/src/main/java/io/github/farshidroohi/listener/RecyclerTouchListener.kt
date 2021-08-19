@@ -1,4 +1,4 @@
-package ir.farshid_roohi.customadapterrecycleview.listener
+package io.github.farshidroohi.listener
 
 import android.content.Context
 import android.view.GestureDetector

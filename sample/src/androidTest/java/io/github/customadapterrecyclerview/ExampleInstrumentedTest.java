@@ -1,4 +1,4 @@
-package ir.farshid_roohi.customadapterrecyclerview;
+package io.github.customadapterrecyclerview;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

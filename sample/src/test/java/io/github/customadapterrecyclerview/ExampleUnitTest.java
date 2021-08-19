@@ -1,4 +1,4 @@
-package ir.farshid_roohi.customadapterrecyclerview;
+package io.github.customadapterrecyclerview;
 
 import org.junit.Test;
 

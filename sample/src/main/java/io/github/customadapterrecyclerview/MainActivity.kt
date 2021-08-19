@@ -1,11 +1,12 @@
-package ir.farshid_roohi.customadapterrecyclerview
+package io.github.customadapterrecyclerview
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import ir.farshid_roohi.customadapterrecycleview.extensions.onItemClickListener
-import ir.farshid_roohi.customadapterrecycleview.extensions.onLoadMoreListener
+import io.github.farshidroohi.extensions.onItemClickListener
+import io.github.farshidroohi.extensions.onLoadMoreListener
+import ir.farshid_roohi.customadapterrecyclerview.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 

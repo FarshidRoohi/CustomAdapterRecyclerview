@@ -1,11 +1,11 @@
-package ir.farshid_roohi.customadapterrecycleview.extensions
+package io.github.farshidroohi.extensions
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import ir.farshid_roohi.customadapterrecycleview.listener.RecyclerTouchListener
-import ir.farshid_roohi.customadapterrecycleview.listener.RecyclerTouchListener.OnItemListenerRecyclerViewListener
+import io.github.farshidroohi.listener.RecyclerTouchListener
+import io.github.farshidroohi.listener.RecyclerTouchListener.OnItemListenerRecyclerViewListener
 import kotlin.math.min
 
 fun RecyclerView.onLoadMoreListener(extraCount: Int = 0, onLoadMore: () -> Unit) {

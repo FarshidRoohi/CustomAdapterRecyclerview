@@ -1,4 +1,4 @@
-package ir.farshid_roohi.customadapterrecycleview;
+package io.github.farshidroohi;
 
 import org.junit.Test;
 

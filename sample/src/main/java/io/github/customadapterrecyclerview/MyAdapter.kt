@@ -1,7 +1,8 @@
-package ir.farshid_roohi.customadapterrecyclerview
+package io.github.customadapterrecyclerview
 
 import android.content.Context
-import ir.farshid_roohi.customadapterrecycleview.AdapterRecyclerView
+import io.github.farshidroohi.AdapterRecyclerView
+import ir.farshid_roohi.customadapterrecyclerview.R
 import kotlinx.android.synthetic.main.my_item.view.*
 
 /**
@@ -12,7 +13,7 @@ class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progre
 
     override fun onBindView(viewHolder: ItemViewHolder, position: Int, context: Context, element: String?) {
         val itemView = viewHolder.itemView
-        itemView.txt_title.setText("$element $position")
+        itemView.txt_title.text = "$element $position"
     }
 
 }
