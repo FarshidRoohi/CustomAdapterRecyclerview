@@ -20,8 +20,8 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
  ###### gradle :   
   
 ```Gradle  
-  implementation 'androidx.recyclerview:recyclerview:1.1.0'
-  implementation 'ir.farshid_roohi:customAdapterRecycleView:2.0.1'
+  implementation 'androidx.recyclerview:recyclerview:$VERSION'
+  implementation 'io.github.farshidroohi:customAdapterRecycleView:2.0.2'
  ```  
  <hr>
  
@@ -85,4 +85,15 @@ class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progre
                }
                Toast.makeText(applicationContext, "item long click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
            })
+
+    
+    // Generate Fake Data For List
+    private val tempItems: List<String>
+      get() {
+        val items: MutableList<String> = ArrayList()
+        for (i in 0..21) {
+          items.add("item ")
+        }
+        return items
+      }
 ```
