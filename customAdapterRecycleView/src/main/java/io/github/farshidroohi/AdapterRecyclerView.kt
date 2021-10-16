@@ -16,7 +16,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
  * CustomAdapterRecyclerView | Copyrights 1/1/19.
  */
 
-abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @LayoutRes val itemLoadingLayout: Int, @LayoutRes val itemFailedLayout: Int, @IdRes val retryButtonId: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class AdapterRecyclerView<T>(
+    @LayoutRes val itemViewLayout: Int,
+    @LayoutRes val itemLoadingLayout: Int,
+    @LayoutRes val itemFailedLayout: Int,
+    @IdRes val retryButtonId: Int
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val ITEM_VIEW = 0
@@ -33,7 +38,12 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
     var onRetryClicked: () -> Unit = {}
 
 
-    abstract fun onBindView(viewHolder: ItemViewHolder, position: Int, context: Context, element: T?)
+    abstract fun onBindView(
+        viewHolder: ItemViewHolder,
+        position: Int,
+        context: Context,
+        element: T?
+    )
 
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -129,6 +139,7 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
         }
         this.items.removeAt(position)
         notifyItemRemoved(position)
+        notifyItemRangeChanged(position, itemCount)
     }
 
     fun remove(vararg item: T) {
@@ -233,7 +244,8 @@ abstract class AdapterRecyclerView<T>(@LayoutRes val itemViewLayout: Int, @Layou
 
     // When we use the staggered, change span size because show progressView single row
     private fun handleSingleRowStaggered(viewHolder: RecyclerView.ViewHolder) {
-        val layoutParams = viewHolder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        val layoutParams =
+            viewHolder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
         layoutParams.isFullSpan = lastItemItemState == ItemState.LOADING
     }
 
