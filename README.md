@@ -6,21 +6,21 @@
 
 Very simple use android recyclerView adapter and endlessScrolled in android support library recyclerView 
 
-- Clean uses
+- Manage Loading and Error Layout in The List Row
 - Ability add custom layout in progress pagination and default layout
 - Support linear, Grid, StaggeredGrid LayoutManger for endless
-- Manage Loading and Error Layout in The List Row
+- Clean to uses
 
 ##### screenShot: 
  
  <img src="https://raw.githubusercontent.com/FarshidRoohi/CustomAdapterRecyclerview/master/art/custom_adapter.gif" alt="screen show" width="270px" height="450px">
 
+[Recyclerview version](https://developer.android.com/jetpack/androidx/releases/)
 
  ###### gradle :   
-  
 ```Gradle  
-  implementation 'androidx.recyclerview:recyclerview:$VERSION'
-  implementation 'io.github.farshidroohi:customAdapterRecycleView:2.0.3'
+  implementation 'androidx.recyclerview:recyclerview:'
+  implementation 'io.github.farshidroohi:customAdapterRecycleView:2.1.1'
  ```  
  <hr>
  
@@ -28,71 +28,81 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
 
 #### Sample Adapter 
 
-```Kotiln
+```Kotlin
 
 class MyAdapter : AdapterRecyclerView<String?>(R.layout.my_item, R.layout.progress_view, R.layout.item_error,R.id.btnTrayAgain) {
 
     override fun onBindView(viewHolder: ItemViewHolder, position: Int, context: Context, element: String?) {
-        val itemView = viewHolder.itemView
-        itemView.txt_title.setText("$element $position")
+        val binding = MyItemBinding.bind(viewHolder.itemView)
+        binding.myTitle.text = element
     }
 
 }
 ```
+[View Binding:](https://developer.android.com/topic/libraries/view-binding)
+
+```Gradle
+android {
+...
+
+  buildFeatures {
+        viewBinding = true
+   }
+   
+}
+
+```
+
+Sample Single View Type Adapter [Code](https://github.com/FarshidRoohi/CustomAdapterRecyclerview/tree/master/sample/src/main/java/io/github/customadapterrecyclerview/singleViewType):
+
+```Kotlin
+
+class MyAdapter : AdapterRecyclerView<String?>(
+    R.layout.my_item,
+    R.layout.progress_view,
+    R.layout.item_error,
+    R.id.btnTrayAgain
+) {
+
+    override fun onBindView(
+        viewHolder: RecyclerView.ViewHolder,
+        position: Int,
+        context: Context,
+        element: String?
+    ) {
+        val binding = MyItemBinding.bind(viewHolder.itemView)
+        binding.txtTitle.text = element
+    }
+
+}
+
+```
+
+
+
+Sample Use Adapter:
 
 ```Kotlin
 
     val myAdapter = MyAdapter()
-
-           // onClick Error Button
-           myAdapter.onRetryClicked = {
-               myAdapter.loadingState()
-               // fake request or load other items...
-               recyclerView.postDelayed({
-                   myAdapter.loadedState(tempItems)
-               }, 2000)
-           }
-
-           // set Data in List
-           myAdapter.loadedState(tempItems)
-
-           recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
-           recyclerView.adapter = myAdapter
-
-
-           // set onLoad More Listener for Pagination
-           recyclerView.onLoadMoreListener {
-               if (myAdapter.mustLoad) {
-                   myAdapter.loadingState()
-                   // failed state
-                   recyclerView.postDelayed({
-                       myAdapter.failedState()
-                   }, 2000)
-               }
-           }
-
-
-           // Set onClick Item Listener
-           recyclerView.onItemClickListener({ position ->
-               if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
-                   return@onItemClickListener
-               }
-               Toast.makeText(applicationContext, "item click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
-           }, { position ->
-               if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
-                   return@onItemClickListener
-               }
-               Toast.makeText(applicationContext, "item long click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
-           })
-
     
-    // Generate Fake Data For List
-    private val tempItems: List<String>
-      get() {
-        val items: MutableList<String> = ArrayList()
-        for (i in 0..21) {
-          items.add("item ")
-        }
-        return items
-      }
+    myAdapter.onRetryClicked = {
+         // onClick Error Button
+     }
+     
+     
+    recyclerView.onLoadMoreListener {
+           // set onLoad More Listener for Pagination
+     }
+       
+    recyclerView.onItemClickListener(
+           onClickItem = { position ->
+                // OnClick Item
+        }, onLongClickItem = { position ->
+               // OnLong Click Item
+     })
+
 ```
+
+
+Multi View Type Sample: [Code](https://github.com/FarshidRoohi/CustomAdapterRecyclerview/tree/master/sample/src/main/java/io/github/customadapterrecyclerview/multiViewType)
