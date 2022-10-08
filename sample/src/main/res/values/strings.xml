@@ -2,4 +2,7 @@
     <string name="app_name">Custom Adapter RecyclerView</string>
     <string name="error">Some Error…</string>
     <string name="try_again">Tray Again</string>
+    <string name="single_view_type">Single View Type</string>
+    <string name="multi_view_type">Multi View Type</string>
+    <string name="hello">Hello</string>
 </resources>

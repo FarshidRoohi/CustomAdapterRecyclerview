@@ -34,10 +34,10 @@ fun RecyclerView.onLoadMoreListener(extraCount: Int = 0, onLoadMore: () -> Unit)
 
                 is StaggeredGridLayoutManager -> {
                     val staggeredGridLayoutManager =
-                            layoutManager as StaggeredGridLayoutManager
+                        layoutManager as StaggeredGridLayoutManager
                     val spanCount = staggeredGridLayoutManager.spanCount
                     val lastPositions =
-                            staggeredGridLayoutManager.findFirstVisibleItemPositions(IntArray(spanCount))
+                        staggeredGridLayoutManager.findFirstVisibleItemPositions(IntArray(spanCount))
                     min(lastPositions[0], lastPositions[1])
                 }
 
@@ -61,16 +61,29 @@ fun RecyclerView.onLoadMoreListener(extraCount: Int = 0, onLoadMore: () -> Unit)
 
 }
 
-fun RecyclerView.onItemClickListener(onClickItem: (position: Int) -> Unit, onLongClickItem: (position: Int) -> Unit) {
+fun RecyclerView.onItemClickListener(
+    onClickItem: (position: Int) -> Unit,
+    onLongClickItem: ((position: Int) -> Unit)? = null
+) {
 
-    this.addOnItemTouchListener(RecyclerTouchListener(context, this, object : OnItemListenerRecyclerViewListener {
-        override fun onClick(position: Int) {
-            onClickItem(position)
-        }
+    this.addOnItemTouchListener(
+        RecyclerTouchListener(
+            context,
+            this,
+            object : OnItemListenerRecyclerViewListener {
+                override fun onClick(position: Int) {
+                    if (position != (adapter?.itemCount ?: 0) - 1) {
+                        onClickItem(position)
+                    }
+                }
 
-        override fun onLongClick(position: Int) {
-            onLongClickItem(position)
-        }
-    }))
+                override fun onLongClick(position: Int) {
+                    if (position != (adapter?.itemCount ?: 0) - 1) {
+                        onLongClickItem?.invoke(position)
+                    }
+
+                }
+            })
+    )
 
 }

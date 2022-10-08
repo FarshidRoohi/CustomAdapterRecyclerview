@@ -1,14 +1,13 @@
 package io.github.customadapterrecyclerview
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import io.github.farshidroohi.extensions.onItemClickListener
-import io.github.farshidroohi.extensions.onLoadMoreListener
+import io.github.customadapterrecyclerview.multiViewType.MultiViewTypeActivity
+import io.github.customadapterrecyclerview.singleViewType.SingleViewTypeActivity
 import ir.farshid_roohi.customadapterrecyclerview.R
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,58 +15,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val myAdapter = MyAdapter()
-
-        // onClick Error Button
-        myAdapter.onRetryClicked = {
-            myAdapter.loadingState()
-            // fake request or load other items...
-            recyclerView.postDelayed({
-                myAdapter.loadedState(tempItems)
-            }, 2000)
+        findViewById<Button>(R.id.btn_single_view_type).setOnClickListener {
+            startActivity(Intent(this, SingleViewTypeActivity::class.java))
+        }
+        findViewById<Button>(R.id.btn_multi_view_type).setOnClickListener {
+            startActivity(Intent(this, MultiViewTypeActivity::class.java))
         }
 
-        // set Data in List
-        myAdapter.loadedState(tempItems)
-
-        recyclerView.layoutManager = GridLayoutManager(this@MainActivity, 2)
-        recyclerView.adapter = myAdapter
-
-
-        // set onLoad More Listener for Pagination
-        recyclerView.onLoadMoreListener {
-            if (myAdapter.mustLoad) {
-                myAdapter.loadingState()
-                // failed state
-                recyclerView.postDelayed({
-                    myAdapter.failedState()
-                }, 2000)
-            }
-        }
-
-
-        // Set onClick Item Listener
-        recyclerView.onItemClickListener({ position ->
-            if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
-                return@onItemClickListener
-            }
-            Toast.makeText(applicationContext, "item click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
-        }, { position ->
-            if (position == myAdapter.itemCount - 1 && !myAdapter.mustLoad) {
-                return@onItemClickListener
-            }
-            Toast.makeText(applicationContext, "item long click :  ${myAdapter.getItem(position)}$position", Toast.LENGTH_SHORT).show()
-        })
     }
-
-
-    // Generate Fake Data For List
-    private val tempItems: List<String>
-        get() {
-            val items: MutableList<String> = ArrayList()
-            for (i in 0..21) {
-                items.add("item ")
-            }
-            return items
-        }
 }
