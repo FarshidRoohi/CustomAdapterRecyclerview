@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.github.farshidroohi.NewAdapterRecyclerView
+import io.github.farshidroohi.AdapterRecyclerView
 import ir.farshid_roohi.customadapterrecyclerview.R
 import ir.farshid_roohi.customadapterrecyclerview.databinding.ItemFourBinding
 import ir.farshid_roohi.customadapterrecyclerview.databinding.ItemThreeBinding
@@ -16,7 +16,7 @@ import ir.farshid_roohi.customadapterrecyclerview.databinding.MyItemBinding
  * Created by Farshid Roohi.
  * CustomAdapterRecyclerView | Copyrights 1/2/19.
  */
-class MultiViewTypeAdapter : NewAdapterRecyclerView<Model?>(
+class MultiViewTypeAdapter : AdapterRecyclerView<Model?>(
     0, R.layout.progress_view,
     R.layout.item_error,
     R.id.btnTrayAgain

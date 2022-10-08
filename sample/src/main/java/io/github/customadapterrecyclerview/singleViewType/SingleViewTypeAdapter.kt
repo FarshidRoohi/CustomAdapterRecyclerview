@@ -2,7 +2,7 @@ package io.github.customadapterrecyclerview.singleViewType
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import io.github.farshidroohi.NewAdapterRecyclerView
+import io.github.farshidroohi.AdapterRecyclerView
 import ir.farshid_roohi.customadapterrecyclerview.R
 import ir.farshid_roohi.customadapterrecyclerview.databinding.MyItemBinding
 
@@ -10,7 +10,7 @@ import ir.farshid_roohi.customadapterrecyclerview.databinding.MyItemBinding
  * Created by Farshid Roohi.
  * CustomAdapterRecyclerView | Copyrights 1/2/19.
  */
-class SingleViewTypeAdapter : NewAdapterRecyclerView<String?>(
+class SingleViewTypeAdapter : AdapterRecyclerView<String?>(
     R.layout.my_item,
     R.layout.progress_view,
     R.layout.item_error,

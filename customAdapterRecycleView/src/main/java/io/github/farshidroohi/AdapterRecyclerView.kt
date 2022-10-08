@@ -24,10 +24,11 @@ abstract class AdapterRecyclerView<T>(
     @IdRes val retryButtonId: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+
     companion object {
-        private const val ITEM_VIEW = 0
-        private const val ITEM_LOADING = 1
-        private const val ITEM_FAILED = 2
+        const val ITEM_VIEW = 0
+        const val ITEM_LOADING = 1
+        const val ITEM_FAILED = 2
     }
 
     val items: MutableList<T?> = arrayListOf()
@@ -40,18 +41,26 @@ abstract class AdapterRecyclerView<T>(
 
 
     abstract fun onBindView(
-        viewHolder: ItemViewHolder,
+        viewHolder: RecyclerView.ViewHolder,
         position: Int,
         context: Context,
         element: T?
     )
 
+    open fun onCreateViewHolder(
+        layoutInflater: LayoutInflater,
+        viewGroup: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder? {
+        return null
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val inflater = LayoutInflater.from(viewGroup.context)
 
         return when (viewType) {
+
             ITEM_VIEW -> {
                 val view = inflater.inflate(itemViewLayout, viewGroup, false)
                 ItemViewHolder(view)
@@ -66,11 +75,7 @@ abstract class AdapterRecyclerView<T>(
                 val view = inflater.inflate(itemFailedLayout, viewGroup, false)
                 FailedViewHolder(view)
             }
-
-            else -> {
-                val view = inflater.inflate(itemViewLayout, viewGroup, false)
-                ItemViewHolder(view)
-            }
+            else -> onCreateViewHolder(inflater, viewGroup, viewType)!!
         }
 
     }
@@ -78,10 +83,6 @@ abstract class AdapterRecyclerView<T>(
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
 
         when (viewHolder) {
-
-            is ItemViewHolder -> {
-                onBindView(viewHolder, position, viewHolder.itemView.context, getItem(position))
-            }
 
             is FailedViewHolder -> {
 
@@ -91,11 +92,13 @@ abstract class AdapterRecyclerView<T>(
                 view?.setOnClickListener {
                     onRetryClicked()
                 }
-
             }
 
             is LoadingViewHolder -> {
                 handleSingleRow(viewHolder, position)
+            }
+            else -> {
+                onBindView(viewHolder, position, viewHolder.itemView.context, getItem(position))
             }
 
         }
@@ -268,5 +271,4 @@ abstract class AdapterRecyclerView<T>(
     class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     class FailedViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
 }
