@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import io.github.farshidroohi.AdapterRecyclerView.Companion.ITEM_FAILED
 import io.github.farshidroohi.listener.RecyclerTouchListener
 import io.github.farshidroohi.listener.RecyclerTouchListener.OnItemListenerRecyclerViewListener
 import kotlin.math.min
@@ -72,13 +73,13 @@ fun RecyclerView.onItemClickListener(
             this,
             object : OnItemListenerRecyclerViewListener {
                 override fun onClick(position: Int) {
-                    if (position != (adapter?.itemCount ?: 0) - 1) {
+                    if (adapter?.getItemViewType(position) != ITEM_FAILED) {
                         onClickItem(position)
                     }
                 }
 
                 override fun onLongClick(position: Int) {
-                    if (position != (adapter?.itemCount ?: 0) - 1) {
+                    if (adapter?.getItemViewType(position) != ITEM_FAILED) {
                         onLongClickItem?.invoke(position)
                     }
 
