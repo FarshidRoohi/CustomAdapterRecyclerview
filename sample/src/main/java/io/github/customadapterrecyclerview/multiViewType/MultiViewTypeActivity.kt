@@ -8,15 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.farshidroohi.extensions.onItemClickListener
 import io.github.farshidroohi.extensions.onLoadMoreListener
 import ir.farshid_roohi.customadapterrecyclerview.R
+import ir.farshid_roohi.customadapterrecyclerview.databinding.ActivityMultiViewTypeBinding
 
 class MultiViewTypeActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMultiViewTypeBinding
 
     private val myAdapter = MultiViewTypeAdapter()
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_multi_view_type)
+        binding = ActivityMultiViewTypeBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         recyclerView = findViewById(R.id.recyclerView)
 

@@ -26,9 +26,9 @@ abstract class AdapterRecyclerView<T>(
 
 
     companion object {
-        const val ITEM_VIEW = 0
-        const val ITEM_LOADING = 1
-        const val ITEM_FAILED = 2
+        const val ITEM_VIEW = 0x2328
+        const val ITEM_LOADING = 0x2329
+        const val ITEM_FAILED = 0x232A
     }
 
     val items: MutableList<T?> = arrayListOf()
