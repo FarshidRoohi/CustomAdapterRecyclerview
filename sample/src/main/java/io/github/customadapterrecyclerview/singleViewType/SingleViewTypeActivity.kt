@@ -77,7 +77,7 @@ class SingleViewTypeActivity : AppCompatActivity() {
     private val fakeItems: List<String>
         get() {
             val items: MutableList<String> = ArrayList()
-            for (i in 0..21) {
+            for (i in 0..31) {
                 items.add("item ")
             }
             return items
