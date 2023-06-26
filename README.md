@@ -20,7 +20,7 @@ Very simple use android recyclerView adapter and endlessScrolled in android supp
  ###### gradle :   
 ```Gradle  
   implementation 'androidx.recyclerview:recyclerview:$VERSION'
-  implementation 'io.github.farshidroohi:customAdapterRecycleView:2.1.2'
+  implementation 'io.github.farshidroohi:customAdapterRecycleView:2.1.4'
  ```  
  <hr>
  
